@@ -1,6 +1,5 @@
 <?php 
-
-    require __DIR__ . '/templates/alert.php';
+    session_start();
     require_once __DIR__ . '/utils/functions.php';
 
     //data
@@ -13,8 +12,15 @@
     $numbers = $_GET['numbers'] ?? '';
     $sybmols = $_GET['sybmols'] ?? '';
     
+    if (isset($length)) { 
+        $is_valid_len = $check_len($length);
+    } else {
+        $alerts=['length'];
+    }
+    
+    
     $length_err = 'Inserisci un valore corretto';
-
+    
     $allowed_numbers = str_split('0123456789');
     $allowed_letters = str_split('abcdefghijklmnopqrstuvwxyz');
     $allowed_symbols = str_split('?!&');
@@ -22,7 +28,7 @@
     $allowed_characters= $set_characters($allowed_numbers, $allowed_letters, $allowed_symbols);
     
     $password = $generate_psw($length, $allowed_characters);
-
+    
 ?>
 
 

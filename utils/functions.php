@@ -11,6 +11,7 @@ $generate_psw = function ($length, $allowed_characters) {
     }
     
     $result = implode("", $array);
+    
     return $result;
 };
    
