@@ -31,4 +31,6 @@ header {
     padding-left: 0;
 }
 
-h6 {}
+.container {
+    width: 700px;
+}

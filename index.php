@@ -1,34 +1,41 @@
 <?php 
-    session_start();
-    require_once __DIR__ . '/utils/functions.php';
+session_start();
 
-    //data
-    $alerts=[];
-    
-    
-    $length = $_GET['psw_len'] ?? '';
-    $repeat = $_GET['repeat'] ?? '';
-    $letters = $_GET['letters'] ?? '';
-    $numbers = $_GET['numbers'] ?? '';
-    $sybmols = $_GET['sybmols'] ?? '';
-    
-    if (isset($length)) { 
-        $is_valid_len = $check_len($length);
-    } else {
-        $alerts=['length'];
-    }
-    
-    
-    $length_err = 'Inserisci un valore corretto';
-    
-    $allowed_numbers = str_split('0123456789');
-    $allowed_letters = str_split('abcdefghijklmnopqrstuvwxyz');
-    $allowed_symbols = str_split('?!&');
-    
-    $allowed_characters= $set_characters($allowed_numbers, $allowed_letters, $allowed_symbols);
+require_once __DIR__ . '/utils/functions.php';
+
+//data
+$alerts=[];
+
+
+$length = $_GET['psw_len'] ?? '';
+$repeat = $_GET['repeat'] ?? '';
+$letters = $_GET['letters'] ?? '';
+$numbers = $_GET['numbers'] ?? '';
+$symbols = $_GET['symbols'] ?? '';
+
+if (isset($length)) { 
+    $is_valid_len = $check_len($length);
+} else {
+    $alerts=['length'];
+}
+
+
+$length_err = 'Inserisci un valore corretto';
+
+$allowed_numbers = str_split('0123456789');
+$allowed_letters = str_split('abcdefghijklmnopqrstuvwxyz');
+$allowed_symbols = str_split('?!&');
+
+$allowed_characters= $set_characters($allowed_numbers, $allowed_letters, $allowed_symbols);
+
+if(!empty($length)) {
     
     $password = $generate_psw($length, $allowed_characters);
-    
+    $_SESSION["password"] = $password;
+    //var_dump($_SESSION["password"]);
+    header('Location: success.php');
+}
+
 ?>
 
 
@@ -49,8 +56,7 @@
         <h1>Strong Password Generator</h1>
         <h4>Genera una password sicura</h4>
     </header>
-    <main class="container-fluid">
-        
+    <main class="container">
         <?php  if (!isset($password)) :?>
             <section id="alert">    
                 <?php  if (!isset($alerts)) :?>
@@ -59,18 +65,11 @@
                     <div class="alert alert-danger" role="alert"> <?php echo $length_err ?> </div>
                 <?php endif ;?>
             </section>
-        <?php else :?>
-        <section id=psw_gen>
-            <div class="alert alert-info" role="alert">
-                <Strong> La password generata è la seguente: </strong><span><?php echo $password ?></span>
-            </div>
-        </section>
         <?php endif ;?>
-        
-        <form id="params" action="index.php" method="GET" novalidate>
+        <form id="params" action="index.php" method="GET">
             <div class="d-flex">
                 <label for="psw_length">Lunghezza password: </label>
-                <input type="number" id="psw_length" name="psw_len" value="<?= $length ?>">
+                <input type="number" id="psw_length" name="psw_len" value="<?= isset($length) ? $length : 5  ?>">
             </div>
             <div class="d-flex">
                 <label>Consenti ripetizioni di uno o più caratteri: </label>
@@ -85,15 +84,15 @@
                     </div>
                     <div id="more_filt"  class="form-check">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" id="letters" name="letters"  <?= isset($letters) ? "checked" : "" ?>>
+                            <input class="form-check-input" type="checkbox" value="" id="letters" name="letters"  <?= isset($letters) ? "checked" : "" ?>>
                                 <label class="form-check-label" for="letters">Lettere</label>
                         </div>    
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" id="numbers" name="numbers"  <?= isset($numbers) ? "checked" : "" ?>>
+                            <input class="form-check-input" type="checkbox" value="" id="numbers" name="numbers"  <?= isset($numbers) ? "checked" : "" ?>>
                             <label class="form-check-label" for="numbers">Numeri</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" id="symbols" name="symbols"  <?= isset($symbols) ? "checked" : "" ?>>
+                            <input class="form-check-input" type="checkbox" value="" id="symbols" name="symbols"  <?= isset($symbols) ? "checked" : "" ?>>
                             <label class="form-check-label" for="symbols">Simboli</label>
                         </div>
                     </div>

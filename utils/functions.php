@@ -10,9 +10,9 @@ $generate_psw = function ($length, $allowed_characters) {
         $array[] = $allowed_characters[$key];
     }
     
-    $result = implode("", $array);
+    $password = implode("", $array);
     
-    return $result;
+    return $password;
 };
    
 $set_characters = function ($allowed_numbers, $allowed_letters, $allowed_symbols) {
